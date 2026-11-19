@@ -26,4 +26,6 @@ Start Codex, Pi or OpenCode in this checkout and ask it to follow [the orchestra
 rtk proxy python -m http.server 8000 --bind 127.0.0.1 --directory docs
 ```
 
-Open [the local ledger](http://127.0.0.1:8000/). To deploy, push this repository to GitHub and choose **Settings → Pages → Source → GitHub Actions**. The included workflow publishes the static contents of `docs/`. Commit the regenerated snapshot and proof files when publishing new progress. Visitors can inspect the proof without installing the game.
+Open [the local ledger](http://127.0.0.1:8000/) or the [public dashboard](https://dohmboy64bit.github.io/ArmyMenRTS/). The browser checks both snapshots every 15 seconds and on return to the tab. Ten slots show their currently leased functions.
+
+Run one `python live_dashboard.py --push` process on the scheduler machine during a batch. It checks the SQLite queue every five seconds, refreshes verification when the reconstruction tree changes, and coalesces public updates to at most one push per minute. GitHub Pages serves the root of `gh-pages`. The publisher uses a separate Git checkout under `.army/pages`. Only the public dashboard, snapshots and linked proof are published there. Push source changes to `main` separately. Omit `--push` for local-only updates or add `--once` for one export. Restart the publisher after reboot.

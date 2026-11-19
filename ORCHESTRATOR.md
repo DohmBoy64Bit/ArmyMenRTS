@@ -1,5 +1,7 @@
 # Orchestrating a matching batch
 
+Keep one `python live_dashboard.py --push` process running during the batch. It mirrors lease changes to the local site and the public Pages branch, and refreshes the verified ledger after a reconstruction is integrated. Only the dispatcher launches workers.
+
 Run `python workflow.py rules` and read its output when starting a batch, whenever a rules document changes, and after every three successful integrations. The integration command checks the refresh checkpoint. For each candidate use REA on the pinned target to corroborate its saved instruction observation, leased entry and function boundaries. The scheduler leases shortest eligible ranges first and resolves equal sizes by RVA.
 
 Codex is the default project lead. Pi and OpenCode can follow this same procedure. Use one project lead per checkout. The SQLite scheduler leases disjoint assignments to up to ten configured workers. The lead owns public progress, shared headers, build changes and final integration.

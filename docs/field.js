@@ -52,7 +52,7 @@ function sourceLink(value, revision, publicPath) {
   return link;
 }
 
-function showRecord() {
+function showRecord(navigate = true) {
   const panel = byId("record");
   const fn = functions.find(entry => recordLink(entry) === location.hash);
   panel.hidden = !fn;
@@ -71,8 +71,10 @@ function showRecord() {
     pair.append(node("dt", label), entry);
     detail.append(pair);
   }
-  panel.focus({preventScroll: true});
-  panel.scrollIntoView({block: "nearest"});
+  if (navigate) {
+    panel.focus({preventScroll: true});
+    panel.scrollIntoView({block: "nearest"});
+  }
 }
 
 function drawSection(section, verified) {
@@ -100,10 +102,8 @@ function drawSection(section, verified) {
   byId("sections").append(row);
 }
 
-async function load() {
-  const response = await fetch("progress.json", {cache: "no-cache"});
-  if (!response.ok) throw new Error("Snapshot unavailable");
-  const data = await response.json();
+function renderProgress(data) {
+  functions.length = 0;
   functions.push(...data.functions);
   functions.sort((a, b) => a.rva - b.rva);
   const verified = functions.filter(matched);
@@ -121,16 +121,52 @@ async function load() {
   const host = location.hostname.match(/^([A-Za-z0-9-]+)\.github\.io$/);
   const project = location.pathname.split("/")[1];
   if (host && /^[A-Za-z0-9_.-]+$/.test(project)) repository = "https://github.com/" + host[1] + "/" + project;
+  byId("sections").replaceChildren();
   for (const section of data.sections || []) drawSection(section, verified);
   if (!data.sections?.length) byId("sections").textContent = "No code sections recorded in this snapshot.";
   showRows();
-  showRecord();
-  byId("query").addEventListener("input", showRows);
-  window.addEventListener("hashchange", showRecord);
+  showRecord(false);
 }
 
-load().catch(() => {
-  byId("error").hidden = false;
-  byId("error").textContent = "The verification snapshot could not be loaded. Reload to try again.";
-  byId("bytes").textContent = "Coverage unavailable";
-});
+let lastProgress = "";
+let busy = false;
+async function readSnapshot(name) {
+  const response = await fetch(name + ".json?t=" + Date.now(), {cache: "no-store"});
+  if (!response.ok) throw new Error(name);
+  return response.text();
+}
+
+async function refresh() {
+  if (busy) return;
+  busy = true;
+  try {
+    const [progress, workers] = await Promise.all([readSnapshot("progress"), readSnapshot("workers")]);
+    const pool = JSON.parse(workers);
+    if (progress !== lastProgress) {
+      renderProgress(JSON.parse(progress));
+      lastProgress = progress;
+    }
+    const rows = pool.slots.map(slot => {
+      const row = node("tr");
+      const active = slot.job && slot.expires * 1000 > Date.now();
+      const status = active ? "Assigned" : slot.job ? "Lease expired" : "Unassigned";
+      row.append(node("td", String(slot.slot).padStart(2,"0")), node("td", status),
+        node("td", slot.job?.name ?? "—"), node("td", slot.job ? hex(slot.job.rva) : "—"),
+        node("td", slot.job?.size ?? "—"));
+      return row;
+    });
+    byId("workers").replaceChildren(...rows);
+    byId("sync").textContent = "Snapshot updated " + new Date(pool.updated_at).toLocaleString();
+    byId("error").hidden = true;
+  } catch {
+    byId("error").hidden = false;
+    byId("error").textContent = "Live update unavailable. Retrying in 15 seconds.";
+  } finally {
+    busy = false;
+  }
+}
+byId("query").addEventListener("input", showRows);
+window.addEventListener("hashchange", () => showRecord());
+document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
+setInterval(refresh, 15000);
+refresh();

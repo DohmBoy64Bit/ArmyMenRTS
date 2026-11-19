@@ -238,7 +238,8 @@ def integrate(job_id):
         path = Path(manifest[key])
         if not path.as_posix().startswith(prefix) or ".." in path.parts:
             raise ValueError(f"candidate {key} must be in the assigned directory")
-    if git("status","--porcelain","--untracked-files=no"):
+    if git("status","--porcelain","--untracked-files=no","--",".",":(exclude)docs/progress.json",
+           ":(exclude)docs/workers.json",":(exclude)docs/proof/**"):
         raise ValueError("integration requires a clean tracked working tree")
     head = git("rev-parse","HEAD")
     existing = bool(git("ls-tree","-r","--name-only",head,"--",prefix))
