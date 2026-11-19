@@ -43,57 +43,57 @@
       "public_evidence": "proof/6e29b8c67cac05f6e32a21792579a727aaf50056/0007f3d0/evidence.txt"
     },
     {
-      "name": "inferred_reset_fields_and_clear_bit_0",
       "rva": 340560,
       "size": 21,
+      "name": "inferred_reset_fields_and_clear_bit_0",
       "status": "queued"
     },
     {
-      "name": "inferred_field_10_is_nonzero",
       "rva": 634768,
       "size": 11,
+      "name": "inferred_field_10_is_nonzero",
       "status": "queued"
     },
     {
-      "name": "inferred_nested_address_or_default",
       "rva": 846288,
       "size": 17,
+      "name": "inferred_nested_address_or_default",
       "status": "queued"
     },
     {
-      "name": "inferred_read_18_if_0c_present",
       "rva": 872448,
       "size": 14,
+      "name": "inferred_read_18_if_0c_present",
       "status": "queued"
     },
     {
-      "name": "inferred_read_field_08_bit_4",
       "rva": 894192,
       "size": 10,
+      "name": "inferred_read_field_08_bit_4",
       "status": "queued"
     },
     {
-      "name": "inferred_read_nested_field_08",
       "rva": 980016,
       "size": 7,
+      "name": "inferred_read_nested_field_08",
       "status": "queued"
     },
     {
-      "name": "inferred_read_nullable_nested_04",
       "rva": 1070368,
       "size": 14,
+      "name": "inferred_read_nullable_nested_04",
       "status": "queued"
     },
     {
-      "name": "inferred_field_04_differs_from_minus_one",
       "rva": 1102960,
       "size": 12,
+      "name": "inferred_field_04_differs_from_minus_one",
       "status": "queued"
     },
     {
-      "name": "inferred_move_one_between_counters",
       "rva": 1116543,
       "size": 16,
+      "name": "inferred_move_one_between_counters",
       "status": "queued"
     }
   ]
