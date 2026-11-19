@@ -2,12 +2,7 @@
   "slots": [
     {
       "slot": 1,
-      "job": {
-        "name": "inferred_address_at_nested_offset_14",
-        "rva": 521168,
-        "size": 7
-      },
-      "expires": 1795069338
+      "job": null
     },
     {
       "slot": 2,
@@ -48,11 +43,17 @@
   ],
   "events": [
     {
+      "event": "submitted",
+      "at": 1795068483.4363475,
+      "name": "inferred_address_at_nested_offset_14",
+      "rva": 521168
+    },
+    {
       "event": "claim",
       "at": 1795068313.2418947,
       "name": "inferred_address_at_nested_offset_14",
       "rva": 521168
     }
   ],
-  "updated_at": "2026-11-19T06:07:19.550409+00:00"
+  "updated_at": "2026-11-19T06:08:07.209989+00:00"
 }
