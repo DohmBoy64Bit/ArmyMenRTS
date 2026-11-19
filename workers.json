@@ -43,6 +43,12 @@
   ],
   "events": [
     {
+      "event": "integrated",
+      "at": 1795068578.052499,
+      "name": "inferred_address_at_nested_offset_14",
+      "rva": 521168
+    },
+    {
       "event": "submitted",
       "at": 1795068483.4363475,
       "name": "inferred_address_at_nested_offset_14",
@@ -55,5 +61,5 @@
       "rva": 521168
     }
   ],
-  "updated_at": "2026-11-19T06:08:07.209989+00:00"
+  "updated_at": "2026-11-19T06:09:40.784573+00:00"
 }
