@@ -208,6 +208,13 @@ def integrate(job_id):
     paths = git("diff","--name-only",base,commit).splitlines()
     if not paths or any(not path.startswith(prefix) for path in paths):
         raise ValueError("candidate changes files outside its assigned function directory")
+    manifest = json.loads(git("show",commit+":"+prefix+"function.json"))
+    if (manifest["rva"],manifest["size"]) != (job["rva"],job["size"]):
+        raise ValueError("candidate manifest differs from assigned range")
+    for key in ("source","evidence"):
+        path = Path(manifest[key])
+        if not path.as_posix().startswith(prefix) or ".." in path.parts:
+            raise ValueError(f"candidate {key} must be in the assigned directory")
     if git("status","--porcelain","--untracked-files=no"):
         raise ValueError("integration requires a clean tracked working tree")
     head = git("rev-parse","HEAD")

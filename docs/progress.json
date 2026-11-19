@@ -22,10 +22,70 @@
       "size": 10,
       "source": "reconstruction/read_nested_word.cpp",
       "evidence": "reconstruction/read_nested_word.md",
-      "revision": "d4de1d762b90ceeb4fca7d80e89c85f23e06106a",
+      "revision": "3966f1e215823b9665f2d13e00fc00bf16dedc81",
       "status": "matched",
-      "public_source": "proof/d4de1d762b90ceeb4fca7d80e89c85f23e06106a/00004560/source.txt",
-      "public_evidence": "proof/d4de1d762b90ceeb4fca7d80e89c85f23e06106a/00004560/evidence.txt"
+      "public_source": "proof/3966f1e215823b9665f2d13e00fc00bf16dedc81/00004560/source.txt",
+      "public_evidence": "proof/3966f1e215823b9665f2d13e00fc00bf16dedc81/00004560/evidence.txt"
+    },
+    {
+      "name": "inferred_reset_fields_and_clear_bit_0",
+      "rva": 340560,
+      "size": 21,
+      "status": "queued"
+    },
+    {
+      "name": "inferred_address_at_nested_offset_14",
+      "rva": 521168,
+      "size": 7,
+      "status": "queued"
+    },
+    {
+      "name": "inferred_field_10_is_nonzero",
+      "rva": 634768,
+      "size": 11,
+      "status": "queued"
+    },
+    {
+      "name": "inferred_nested_address_or_default",
+      "rva": 846288,
+      "size": 17,
+      "status": "queued"
+    },
+    {
+      "name": "inferred_read_18_if_0c_present",
+      "rva": 872448,
+      "size": 14,
+      "status": "queued"
+    },
+    {
+      "name": "inferred_read_field_08_bit_4",
+      "rva": 894192,
+      "size": 10,
+      "status": "queued"
+    },
+    {
+      "name": "inferred_read_nested_field_08",
+      "rva": 980016,
+      "size": 7,
+      "status": "queued"
+    },
+    {
+      "name": "inferred_read_nullable_nested_04",
+      "rva": 1070368,
+      "size": 14,
+      "status": "queued"
+    },
+    {
+      "name": "inferred_field_04_differs_from_minus_one",
+      "rva": 1102960,
+      "size": 12,
+      "status": "queued"
+    },
+    {
+      "name": "inferred_move_one_between_counters",
+      "rva": 1116543,
+      "size": 16,
+      "status": "queued"
     }
   ]
 }
