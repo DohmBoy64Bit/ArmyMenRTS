@@ -14,6 +14,7 @@ import threading
 import time
 from urllib.parse import urlparse
 import uuid
+import rules
 
 
 ROOT = Path(__file__).resolve().parent
@@ -149,10 +150,10 @@ def run_job(db, job, slot, attempt, stop):
     build, manifest = f"{directory}/build.py", f"{directory}/function.json"
     instructions = (
         f"Use your own REA session or a process-local REA CLI. CLI fallback: npx -y rea-agents@6.8.0 "
-        f"function TARGET VA --json, where VA is the PE image base plus the leased RVA. "
+        f"instructions TARGET VA --format json, where VA is the PE image base plus the leased RVA. "
         f"Inspect the pinned Steam executable "
         f"from WORKFLOW.md. Reconstruct the assigned function from evidence. Read the repository "
-        f"README and existing examples. Write only within {directory}/. Include C or C++ source, "
+        f"README and existing examples. Write committed files only within {directory}/. Include C or C++ source, "
         f"an evidence markdown file describing the reference, boundary, caller and build experiment, "
         f"{build} accepting --output PATH and writing raw compiled function bytes, and {manifest} "
         f"with rva and size integers, name, source and evidence (repo-relative paths). Test the build. "
@@ -160,7 +161,14 @@ def run_job(db, job, slot, attempt, stop):
         f"history, run the dispatcher, or edit the baseline. If blocked, describe why in your final "
         f"response. The orchestrator records the patch and independently verifies matches."
     )
-    assignment = {"version": 1, "job": dict(job), "target": str(workflow.TARGET),
+    current_rules = rules.packet()
+    instructions = ("Read the entire rules_packet.text before starting. Its current rules apply even "
+                    "when the base checkout contains older instructions. Open the target with REA and "
+                    "call read_function_instructions for this entry VA. Save its full Evidence object to "
+                    "rea-observation.json in the checkout root. Cite that evidence ID and explain the "
+                    "specific finding in the evidence Markdown. Set rules_sha256 in function.json to "
+                    "rules_packet.sha256 after reading. " + instructions)
+    assignment = {"version": 2, "rules_packet": current_rules, "job": dict(job), "target": str(workflow.TARGET),
                   "sha256": workflow.DIGEST, "instructions": instructions}
     (checkout / "worker-job.json").write_text(json.dumps(assignment, indent=2), encoding="utf-8")
     argv, env = command(slot, attempt)
@@ -190,10 +198,16 @@ def run_job(db, job, slot, attempt, stop):
     if (record.get("rva"), record.get("size")) != (job["rva"], job["size"]):
         raise ValueError("Worker manifest does not cover its leased range.")
     scope = (checkout / directory).resolve()
+    observation = checkout / "rea-observation.json"
+    evidence_id = rules.check_observation(observation, job, workflow.DIGEST)
+    if record.get("rules_sha256") != current_rules["sha256"]:
+        raise ValueError("worker manifest is missing its assigned rules acknowledgement")
     for name in (build, manifest, record["evidence"], record["source"]):
         file = (checkout / name).resolve()
         if not file.is_relative_to(scope) or not file.is_file():
             raise ValueError(f"Missing or out-of-scope reconstruction file {name!r}")
+    if evidence_id not in (checkout / record["evidence"]).read_text(encoding="utf-8"):
+        raise ValueError("function evidence must cite the returned REA observation")
     git(checkout, "add", "--", directory)
     paths = git(checkout, "diff", "--cached", "--name-only", "-z").split("\0")
     if any(p and not p.startswith(directory + "/") for p in paths):
@@ -206,6 +220,7 @@ def run_job(db, job, slot, attempt, stop):
         subprocess.run(["git", "-C", str(checkout), "diff", "--binary", revision, commit],
                        check=True, stdout=output)
     return {"disposition": "candidate", "commit": commit, "manifest": manifest, "build": build,
+            "observation": str(observation), "evidence_id": evidence_id, "rules_sha256": current_rules["sha256"],
             "patch": str(patch), "evidence": record["evidence"], "build_log": str(log)}
 
 

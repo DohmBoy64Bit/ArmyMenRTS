@@ -1,5 +1,7 @@
 # Army Men RTS matching decompilation
 
+All orchestrators and workers share the [operating rules](RULES.md). Run `python workflow.py rules` to load the current instructions and record the orchestrator checkpoint.
+
 This project reconstructs the Steam x86 version of Army Men RTS from source. The first verified C++ function is an inferred nested-field accessor at RVA `0x4560`. The project includes ten additional REA-identified assignments and a static progress ledger.
 
 ## Verify the first match

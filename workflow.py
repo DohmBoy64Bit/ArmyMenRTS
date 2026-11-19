@@ -12,6 +12,7 @@ import sys
 import tempfile
 import time
 import uuid
+import rules
 import zipfile
 
 ROOT = Path(__file__).resolve().parent
@@ -35,6 +36,8 @@ def transaction(db):
         conn.execute("""CREATE TABLE IF NOT EXISTS prerequisites (
             job_id INTEGER, predecessor INTEGER, PRIMARY KEY(job_id, predecessor))""")
         conn.execute("BEGIN IMMEDIATE")
+        conn.execute("""CREATE TABLE IF NOT EXISTS rule_refresh (
+            singleton INTEGER PRIMARY KEY, accepted INTEGER, digest TEXT)""")
         yield conn
 
 
@@ -59,7 +62,7 @@ def claim(db, owner):
         row = conn.execute("""SELECT * FROM jobs j WHERE (state='queued' OR
             (state='leased' AND expires<=?)) AND NOT EXISTS (
             SELECT 1 FROM prerequisites p JOIN jobs previous ON previous.id=p.predecessor
-            WHERE p.job_id=j.id AND previous.state!='integrated') ORDER BY id LIMIT 1""", (now,)).fetchone()
+            WHERE p.job_id=j.id AND previous.state!='integrated') ORDER BY j.size,j.rva,j.id LIMIT 1""", (now,)).fetchone()
         if row is None:
             return None
         attempt = uuid.uuid4().hex
@@ -194,8 +197,24 @@ def snapshot(output):
     return report
 
 
+def refresh_rules(db):
+    packet = rules.packet()
+    with transaction(db) as conn:
+        count = conn.execute("SELECT COUNT(*) FROM jobs WHERE state='integrated'").fetchone()[0]
+        print(packet["text"], flush=True)
+        conn.execute("INSERT OR REPLACE INTO rule_refresh VALUES (1,?,?)",(count,packet["sha256"]))
+
+
+def require_refresh(conn):
+    count = conn.execute("SELECT COUNT(*) FROM jobs WHERE state='integrated'").fetchone()[0]
+    last = conn.execute("SELECT accepted,digest FROM rule_refresh WHERE singleton=1").fetchone()
+    if not last or count-last["accepted"] >= rules.INTERVAL or last["digest"] != rules.packet()["sha256"]:
+        raise ValueError("Read the current operating instructions with python workflow.py rules before integration")
+
+
 def integrate(job_id):
     with transaction(DB) as conn:
+        require_refresh(conn)
         row = conn.execute("SELECT * FROM jobs WHERE id=? AND state='submitted'", (job_id,)).fetchone()
         if not row:
             raise ValueError("job has no submitted candidate")
@@ -209,6 +228,10 @@ def integrate(job_id):
     if not paths or any(not path.startswith(prefix) for path in paths):
         raise ValueError("candidate changes files outside its assigned function directory")
     manifest = json.loads(git("show",commit+":"+prefix+"function.json"))
+    evidence_id = rules.check_observation(result.get("observation") or "",job,DIGEST)
+    if (evidence_id != result.get("evidence_id") or manifest.get("rules_sha256") != rules.packet()["sha256"]
+            or evidence_id not in git("show",commit+":"+manifest["evidence"])):
+        raise ValueError("candidate requires current rules and corroborating REA evidence")
     if (manifest["rva"],manifest["size"]) != (job["rva"],job["size"]):
         raise ValueError("candidate manifest differs from assigned range")
     for key in ("source","evidence"):
@@ -223,6 +246,7 @@ def integrate(job_id):
         raise ValueError("function directory already present with different contents")
     image, sections = target_image()
     with tempfile.TemporaryDirectory() as temp:
+        rules.replay_observation(TARGET, job, DIGEST, result["observation"], Path(temp)/"rea-replay.json")
         checkout = Path(temp)/"checkout"
         git("worktree","add","--detach",str(checkout),head)
         try:
@@ -245,6 +269,7 @@ def main():
     cmd = parser.add_subparsers(dest="action",required=True)
     cmd.add_parser("baseline")
     cmd.add_parser("seed")
+    cmd.add_parser("rules")
     add = cmd.add_parser("enqueue")
     add.add_argument("rva", type=lambda value:int(value,0))
     add.add_argument("size", type=lambda value:int(value,0))
@@ -260,7 +285,9 @@ def main():
     compare = cmd.add_parser("compare-image")
     compare.add_argument("candidate",type=Path)
     args = parser.parse_args()
-    if args.action == "status":
+    if args.action == "rules":
+        refresh_rules(DB)
+    elif args.action == "status":
         with transaction(DB) as conn:
             print(json.dumps([dict(row) for row in conn.execute("SELECT * FROM jobs ORDER BY id")],indent=2))
     elif args.action == "retry":

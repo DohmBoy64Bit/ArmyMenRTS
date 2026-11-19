@@ -1,5 +1,7 @@
 # Army Men RTS matching project
 
+Follow [the operating rules](RULES.md) across all agent runtimes. REA supplies the target evidence for every function. Each worker receives the rules on every assignment. The lead reloads them at startup and after three integrations. Among eligible jobs, the scheduler grants an exclusive lease on the smallest function first, with equal sizes ordered by RVA.
+
 ## Target and definition of done
 
 The baseline is the Steam x86 PE executable amrts.exe, 2,879,488 bytes, SHA-256 34c9cacfcd42a816a5a9e886fbe18ae69ca2b82bdb7ed95588772f3079777b59. Keep the reference installation read-only. Build in a separate directory. Completion requires a clean build from reconstructed inputs, equal file lengths and a successful whole-file binary comparison. Publish both digests and the build revision. Copying ranges from the reference into the output cannot earn matching credit.

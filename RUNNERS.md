@@ -1,5 +1,7 @@
 # Running the worker pool
 
+Every adapter supplies the full current rules packet at each attempt, including attempts based on an older immutable Git revision. Read it before inspecting the leased function. Save the full REA instruction Evidence object in `rea-observation.json` beside `worker-job.json`, cite its evidence ID in the evidence Markdown, and include the packet's `rules_sha256` acknowledgement in the function manifest (use the value of `rules_packet.sha256`). A missing or mismatched observation sends the attempt to review.
+
 From the repository root, authenticate the CLIs you plan to use and configure REA for those clients. Pi workers can use the pinned REA CLI through their shell tool. Each attempt must use a separate REA process or server whenever a tool changes the active target. The worker's prompt, tools and reference executable are local to the machine running the dispatcher. Selected remote providers receive the context their agent sends.
 
 ```powershell
