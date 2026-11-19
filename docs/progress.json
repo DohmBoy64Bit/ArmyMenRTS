@@ -1,0 +1,31 @@
+{
+  "target": {
+    "name": "amrts.exe",
+    "sha256": "34c9cacfcd42a816a5a9e886fbe18ae69ca2b82bdb7ed95588772f3079777b59",
+    "size": 2879488
+  },
+  "sections": [
+    {
+      "name": ".text",
+      "rva": 4096,
+      "size": 2523677
+    }
+  ],
+  "code_bytes": 2523677,
+  "verified_bytes": 10,
+  "whole_file_equal": false,
+  "rebuilt_sha256": null,
+  "functions": [
+    {
+      "name": "OuterRecord::read_nested_word",
+      "rva": 17760,
+      "size": 10,
+      "source": "reconstruction/read_nested_word.cpp",
+      "evidence": "reconstruction/read_nested_word.md",
+      "revision": "d4de1d762b90ceeb4fca7d80e89c85f23e06106a",
+      "status": "matched",
+      "public_source": "proof/d4de1d762b90ceeb4fca7d80e89c85f23e06106a/00004560/source.txt",
+      "public_evidence": "proof/d4de1d762b90ceeb4fca7d80e89c85f23e06106a/00004560/evidence.txt"
+    }
+  ]
+}

@@ -185,6 +185,8 @@ def snapshot(output):
                   rebuilt_sha256=image_result.get("sha256"),functions=rows)
     path = Path(output)
     path.parent.mkdir(parents=True, exist_ok=True)
+    from publish_proof import publish_proof
+    publish_proof(report, path.parent)
     with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent, delete=False) as file:
         json.dump(report, file, indent=2)
         file.write("\n")
@@ -235,6 +237,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     cmd = parser.add_subparsers(dest="action",required=True)
     cmd.add_parser("baseline")
+    cmd.add_parser("seed")
     add = cmd.add_parser("enqueue")
     add.add_argument("rva", type=lambda value:int(value,0))
     add.add_argument("size", type=lambda value:int(value,0))
@@ -272,6 +275,17 @@ def main():
                 mismatch = next((i for i,(a,b) in enumerate(zip(image,other)) if a!=b),min(len(image),len(other)))
                 raise ValueError(f"first difference at file offset {mismatch:#x}")
             print("Whole-file comparison is byte-identical.")
+        elif args.action == "seed":
+            jobs = json.loads((ROOT/"reconstruction/initial-jobs.json").read_text(encoding="utf-8-sig"))
+            head = git("rev-parse","HEAD")
+            for job in jobs:
+                location(sections,job["rva"],job["size"])
+                with transaction(DB) as conn:
+                    existing = conn.execute("SELECT size,name FROM jobs WHERE rva=?", (job["rva"],)).fetchone()
+                if existing and (existing["size"],existing["name"]) == (job["size"], job["name"]):
+                    continue
+                enqueue(DB,job["rva"],job["size"],job["name"],head)
+            print(f"{len(jobs)} starter assignments registered")
         elif args.action == "enqueue":
             location(sections,args.rva,args.size)
             print(enqueue(DB,args.rva,args.size,args.name,git("rev-parse","HEAD"),args.after))

@@ -1,0 +1,62 @@
+[
+  {
+    "rva": 340560,
+    "size": 21,
+    "name": "inferred_reset_fields_and_clear_bit_0",
+    "evidence": "REA/Ghidra 12.1.4 reports one contiguous body, VA 0x453250 through 0x453264 inclusive, ending in RET. ev_3becda97b32a0e80e83f5d5817f948dd085410b9aff11063de5ff082fe244dd1"
+  },
+  {
+    "rva": 521168,
+    "size": 7,
+    "name": "inferred_address_at_nested_offset_14",
+    "evidence": "REA/Ghidra 12.1.4 reports one contiguous body, VA 0x47f3d0 through 0x47f3d6 inclusive, ending in RET. ev_fc39b76b779273aa3044a8f0d955c6c177ad3ee1da8bcc0e50fff7326698d1ad"
+  },
+  {
+    "rva": 634768,
+    "size": 11,
+    "name": "inferred_field_10_is_nonzero",
+    "evidence": "REA/Ghidra 12.1.4 reports one contiguous body, VA 0x49af90 through 0x49af9a inclusive, ending in RET. ev_a3c770324207054a6e9e61c4517657d382ceacac118e3a6f1a0e0b8415c562a2"
+  },
+  {
+    "rva": 846288,
+    "size": 17,
+    "name": "inferred_nested_address_or_default",
+    "evidence": "REA/Ghidra 12.1.4 reports one contiguous body, VA 0x4ce9d0 through 0x4ce9e0 inclusive, ending in RET. ev_f2f00b7869313ec6869fbe61e750dbb0f67405cdf7ebd2bc80b2776b1f4ca1f2"
+  },
+  {
+    "rva": 872448,
+    "size": 14,
+    "name": "inferred_read_18_if_0c_present",
+    "evidence": "REA/Ghidra 12.1.4 reports one contiguous body, VA 0x4d5000 through 0x4d500d inclusive, ending in RET. ev_05f761b9b42ea4d1b2af30c293c1fc4f0101cf55d2d19e3a989fc56c32efced0"
+  },
+  {
+    "rva": 894192,
+    "size": 10,
+    "name": "inferred_read_field_08_bit_4",
+    "evidence": "REA/Ghidra 12.1.4 reports one contiguous body, VA 0x4da4f0 through 0x4da4f9 inclusive, ending in RET. ev_d4b37462cc741a6ad5a9187b57497f4ff0caaa583d4a00a9479b06bc5872c1cc"
+  },
+  {
+    "rva": 980016,
+    "size": 7,
+    "name": "inferred_read_nested_field_08",
+    "evidence": "REA/Ghidra 12.1.4 reports one contiguous body, VA 0x4ef430 through 0x4ef436 inclusive, ending in RET. ev_db9450afe5df2aeb9ef52d51e05210be7c22215a8230f8291e866f82b4ce1427"
+  },
+  {
+    "rva": 1070368,
+    "size": 14,
+    "name": "inferred_read_nullable_nested_04",
+    "evidence": "REA/Ghidra 12.1.4 reports one contiguous body, VA 0x505520 through 0x50552d inclusive, ending in RET. ev_74a90e54945c252ce832bb301955a0987275e783da94c2e7e18df636e53b25e4"
+  },
+  {
+    "rva": 1102960,
+    "size": 12,
+    "name": "inferred_field_04_differs_from_minus_one",
+    "evidence": "REA/Ghidra 12.1.4 reports one contiguous body, VA 0x50d470 through 0x50d47b inclusive, ending in RET. ev_382c1408888e2fc5828593562063c57ac8839b33a51c5a6f1526097061cc37ce"
+  },
+  {
+    "rva": 1116543,
+    "size": 16,
+    "name": "inferred_move_one_between_counters",
+    "evidence": "REA/Ghidra 12.1.4 reports one contiguous body, VA 0x51097f through 0x51098e inclusive, ending in RET. ev_8588518cc7a01487ef7c3f33dcd24796c5491e2d07fa11d97341cbb7a3a1bcfa"
+  }
+]
