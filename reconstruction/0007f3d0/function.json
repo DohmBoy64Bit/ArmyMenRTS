@@ -1,0 +1,8 @@
+{
+  "rva": 521168,
+  "size": 7,
+  "name": "inferred_address_at_nested_offset_14",
+  "source": "reconstruction/0007f3d0/nested_address.cpp",
+  "evidence": "reconstruction/0007f3d0/evidence.md",
+  "rules_sha256": "fa250f0f85b34fe76603f038f0b20f5f9b494ec41fd71be0c8b011d72e456bed"
+}
