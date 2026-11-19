@@ -148,7 +148,9 @@ def run_job(db, job, slot, attempt, stop):
     directory = f"reconstruction/{address}"
     build, manifest = f"{directory}/build.py", f"{directory}/function.json"
     instructions = (
-        f"Use your own REA session or a process-local REA CLI. Inspect the pinned Steam executable "
+        f"Use your own REA session or a process-local REA CLI. CLI fallback: npx -y rea-agents@6.8.0 "
+        f"function TARGET VA --json, where VA is the PE image base plus the leased RVA. "
+        f"Inspect the pinned Steam executable "
         f"from WORKFLOW.md. Reconstruct the assigned function from evidence. Read the repository "
         f"README and existing examples. Write only within {directory}/. Include C or C++ source, "
         f"an evidence markdown file describing the reference, boundary, caller and build experiment, "

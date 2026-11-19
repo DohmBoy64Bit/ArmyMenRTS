@@ -10,6 +10,8 @@ python runners.py --config workers.local.json
 
 Use the same database path as the scheduler. The sample starts ten Codex slots. The check resolves the installed launchers and validates their configuration without making model requests. Dispatch drains the ready queue once. Add `--watch` to keep accepting jobs until interrupted. Reduce the length of `slots` to cap concurrent requests and change `timeout_seconds` to bound a single attempt. Each worker claims a job transactionally, gets a detached checkout at the job's exact commit, renews its lease, and records a candidate or diagnostic result.
 
+For shell-based REA inspection, `npx -y rea-agents@6.8.0 function TARGET VA --json` analyzes one function. Substitute the full executable path and its virtual address (image base plus RVA). The REA installation needs a configured native analysis provider. The project keeps addresses as RVAs for comparison across tool views.
+
 ## Mixed runners and model providers
 
 Replace individual empty objects in the sample's `slots` array with any of these entries. Model names are illustrative. Use a model provided by your account or endpoint.
