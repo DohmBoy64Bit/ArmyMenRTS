@@ -1,0 +1,6 @@
+.army/
+__pycache__/
+*.pyc
+workers.local.json
+.env
+sourcelens.db*

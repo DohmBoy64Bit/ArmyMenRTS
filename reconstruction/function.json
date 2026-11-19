@@ -1,0 +1,7 @@
+{
+  "rva": 17760,
+  "size": 10,
+  "name": "OuterRecord::read_nested_word",
+  "source": "reconstruction/read_nested_word.cpp",
+  "evidence": "reconstruction/read_nested_word.md"
+}
