@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#243526">
+  <title>Army Men RTS · Decompilation progress</title>
+  <link rel="stylesheet" href="field.css">
+  <script src="field.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#content">Skip to progress</a>
+  <header><div class="wrap mast">
+    <a class="brand" href="#content"><span class="insignia" aria-hidden="true">★</span> Army Men RTS</a>
+    <nav aria-label="Main navigation"><a href="#map">Section map</a><a href="#ledger">Function ledger</a></nav>
+  </div></header>
+  <main class="wrap" id="content">
+    <h1>Decompilation<br class="phone"> progress<span>.</span></h1>
+    <p class="error" id="error" hidden role="alert"></p>
+    <section class="cover" aria-labelledby="coverage-title">
+      <div class="coverage">
+        <h2 id="coverage-title">Verified code coverage</h2>
+        <div class="pct" id="percent">—</div>
+        <p id="bytes">Loading verification snapshot…</p>
+        <div class="rail" aria-hidden="true"><i id="fill"></i></div>
+      </div>
+      <div class="binding" aria-hidden="true"></div>
+      <dl class="facts"><div><dt>Reference executable</dt><dd id="target">—</dd></div><div><dt>Matched functions</dt><dd id="count">—</dd></div><div><dt>Whole-file comparison</dt><dd id="equality">—</dd></div></dl>
+    </section>
+    <section id="map"><div class="heading"><h2>Section map</h2><span class="legend"><i></i>Verified <i></i>Unverified</span></div><div id="sections"></div></section>
+    <section id="ledger"><div class="heading"><h2>Function ledger</h2><label class="search"><span aria-hidden="true">⌕</span><input type="search" id="query" aria-label="Search functions by name, status or RVA" placeholder="Search name, status or RVA"></label></div>
+      <div class="table-scroll"><table><thead><tr><th scope="col">Function</th><th scope="col">RVA</th><th scope="col">Bytes</th><th scope="col">Status</th></tr></thead><tbody id="rows"></tbody></table></div>
+      <p id="empty" class="empty" hidden></p>
+    </section>
+    <section id="record" hidden tabindex="-1" aria-labelledby="record-title"><a href="#ledger">← Function ledger</a><h2 id="record-title"></h2><dl id="detail"></dl></section>
+    <section id="pool"><div class="heading"><h2>Worker assignments</h2><small id="sync"></small></div>
+      <div class="table-scroll"><table><thead><tr><th>Slot</th><th>Status</th><th>Function</th><th>RVA</th><th>Bytes</th></tr></thead><tbody id="workers"></tbody></table></div>
+    </section>
+    <footer><h2>Reference SHA-256</h2><code id="sha">—</code></footer>
+    <noscript>Enable JavaScript to explore the ledger, or <a href="progress.json">open the verification snapshot</a>.</noscript>
+  </main>
+</body>
+</html>
