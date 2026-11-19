@@ -21,6 +21,14 @@ def read_queue():
             "SELECT id,rva,size,name,state,owner,expires FROM jobs ORDER BY id")]
 
 
+def recent_events():
+    with w.transaction(w.DB) as conn:
+        return [dict(row) for row in conn.execute("""SELECT h.event, h.at, j.name, j.rva
+            FROM history h JOIN jobs j ON j.id=h.job_id
+            WHERE h.event IN ('claim','submitted','review','integrated')
+            ORDER BY h.at DESC,h.rowid DESC LIMIT 100""")]
+
+
 def worker_slots(jobs, now):
     slots = [{"slot": i, "job": None} for i in range(1, 11)]
     for job in jobs:
@@ -102,9 +110,11 @@ def run(push, once):
                 queue_key, pending = ledger, True
             slots = worker_slots(jobs,now)
             assignments = [s["job"] for s in slots]
-            if assignments != pool_key or (any(assignments) and now-last_workers >= 60):
-                atomic_json(DOCS/"workers.json",dict(slots=slots,updated_at=datetime.now(timezone.utc).isoformat()))
-                pool_key, last_workers, pending = assignments, now, True
+            events = recent_events()
+            activity = (assignments,events)
+            if activity != pool_key or (any(assignments) and now-last_workers >= 60):
+                atomic_json(DOCS/"workers.json",dict(slots=slots,events=events,updated_at=datetime.now(timezone.utc).isoformat()))
+                pool_key, last_workers, pending = activity, now, True
             if push and pending and now-last_push >= 60:
                 publish()
                 last_push, pending = now, False

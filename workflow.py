@@ -175,6 +175,10 @@ def snapshot(output):
     image, sections = target_image()
     image_result = {}
     rows = verify_revision("HEAD", image, sections, image_result=image_result)
+    for row in rows:
+        entry = git("log","-1","--format=%H %cI",row["revision"],"--",row["source"])
+        if entry:
+            row["source_revision"], row["source_committed_at"] = entry.split()
     with transaction(DB) as conn:
         known = {r["rva"] for r in rows}
         for job in conn.execute("SELECT name,rva,size,state FROM jobs ORDER BY rva"):
@@ -261,6 +265,7 @@ def integrate(job_id):
             git("worktree","remove","--force",str(checkout))
     with transaction(DB) as conn:
         conn.execute("UPDATE jobs SET state='integrated' WHERE id=? AND attempt=?", (job_id,job["attempt"]))
+        conn.execute("INSERT INTO history VALUES (?,?,?,?,?)",(job_id,job["attempt"],"integrated",time.time(),merged))
         conn.execute("""UPDATE jobs SET base_revision=? WHERE state='queued' AND id IN
             (SELECT job_id FROM prerequisites WHERE predecessor=?)""",(merged,job_id))
 

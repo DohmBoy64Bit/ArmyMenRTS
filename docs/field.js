@@ -19,8 +19,14 @@ function recordLink(fn) {
 
 function showRows() {
   const search = byId("query").value.trim().toLowerCase();
-  const visible = functions.filter(fn =>
+  const statusFilter = byId("filter").value;
+  const visible = functions.filter(fn => (!statusFilter || fn.status === statusFilter) &&
     [fn.name, fn.status, hex(fn.rva), fn.rva.toString(16)].some(value => value.toLowerCase().includes(search)));
+  const order = byId("order").value;
+  const sorters = {rva:(a,b)=>a.rva-b.rva, descending:(a,b)=>b.rva-a.rva,
+    size:(a,b)=>a.size-b.size, large:(a,b)=>b.size-a.size, name:(a,b)=>a.name.localeCompare(b.name)};
+  visible.sort(sorters[order]);
+  byId("visible-count").textContent = visible.length + " of " + functions.length;
   const body = byId("rows");
   body.replaceChildren();
   for (const fn of visible) {
@@ -137,13 +143,17 @@ async function readSnapshot(name) {
 }
 
 async function refresh() {
-  if (busy) return;
+  if (busy || paused) return;
   busy = true;
   try {
     const [progress, workers] = await Promise.all([readSnapshot("progress"), readSnapshot("workers")]);
     const pool = JSON.parse(workers);
     if (progress !== lastProgress) {
+      const before = new Set(functions.filter(matched).map(fn => fn.rva));
       renderProgress(JSON.parse(progress));
+      const added = functions.filter(fn => matched(fn) && !before.has(fn.rva));
+      if (lastProgress && added.length) notice(added.length === 1 ? "Verified match: " + added[0].name : added.length + " new verified matches");
+      renderHistory();
       lastProgress = progress;
     }
     const rows = pool.slots.map(slot => {
@@ -156,17 +166,24 @@ async function refresh() {
       return row;
     });
     byId("workers").replaceChildren(...rows);
+    byId("leased-total").textContent = pool.slots.filter(s=>s.job && s.expires*1000>Date.now()).length;
+    byId("queued-total").textContent = functions.filter(f=>f.status==="queued").length;
+    byId("review-total").textContent = functions.filter(f=>["submitted","review"].includes(f.status)).length;
+    renderQueueEvents(pool.events || []);
     byId("sync").textContent = "Snapshot updated " + new Date(pool.updated_at).toLocaleString();
     byId("error").hidden = true;
+    checked = Date.now();
+    offline = false;
+    syncLabel();
   } catch {
     byId("error").hidden = false;
+    offline = true;
+    syncLabel();
     byId("error").textContent = "Live update unavailable. Retrying in 15 seconds.";
   } finally {
     busy = false;
   }
 }
 byId("query").addEventListener("input", showRows);
-window.addEventListener("hashchange", () => showRecord());
 document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
 setInterval(refresh, 15000);
-refresh();

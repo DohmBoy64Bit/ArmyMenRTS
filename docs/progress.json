@@ -22,10 +22,12 @@
       "size": 10,
       "source": "reconstruction/read_nested_word.cpp",
       "evidence": "reconstruction/read_nested_word.md",
-      "revision": "d3dd8ccc2157d107d337429061112ffd188a41fa",
+      "revision": "260136371fb0e2a9a319689866632f9735598eba",
       "status": "matched",
-      "public_source": "proof/d3dd8ccc2157d107d337429061112ffd188a41fa/00004560/source.txt",
-      "public_evidence": "proof/d3dd8ccc2157d107d337429061112ffd188a41fa/00004560/evidence.txt"
+      "source_revision": "d4de1d762b90ceeb4fca7d80e89c85f23e06106a",
+      "source_committed_at": "2026-11-19T00:32:49-05:00",
+      "public_source": "proof/260136371fb0e2a9a319689866632f9735598eba/00004560/source.txt",
+      "public_evidence": "proof/260136371fb0e2a9a319689866632f9735598eba/00004560/evidence.txt"
     },
     {
       "name": "inferred_reset_fields_and_clear_bit_0",
