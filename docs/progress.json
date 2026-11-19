@@ -12,7 +12,7 @@
     }
   ],
   "code_bytes": 2523677,
-  "verified_bytes": 10,
+  "verified_bytes": 17,
   "whole_file_equal": false,
   "rebuilt_sha256": null,
   "functions": [
@@ -22,23 +22,30 @@
       "size": 10,
       "source": "reconstruction/read_nested_word.cpp",
       "evidence": "reconstruction/read_nested_word.md",
-      "revision": "260136371fb0e2a9a319689866632f9735598eba",
+      "revision": "6e29b8c67cac05f6e32a21792579a727aaf50056",
       "status": "matched",
       "source_revision": "d4de1d762b90ceeb4fca7d80e89c85f23e06106a",
       "source_committed_at": "2026-11-19T00:32:49-05:00",
-      "public_source": "proof/260136371fb0e2a9a319689866632f9735598eba/00004560/source.txt",
-      "public_evidence": "proof/260136371fb0e2a9a319689866632f9735598eba/00004560/evidence.txt"
-    },
-    {
-      "name": "inferred_reset_fields_and_clear_bit_0",
-      "rva": 340560,
-      "size": 21,
-      "status": "queued"
+      "public_source": "proof/6e29b8c67cac05f6e32a21792579a727aaf50056/00004560/source.txt",
+      "public_evidence": "proof/6e29b8c67cac05f6e32a21792579a727aaf50056/00004560/evidence.txt"
     },
     {
       "name": "inferred_address_at_nested_offset_14",
       "rva": 521168,
       "size": 7,
+      "source": "reconstruction/0007f3d0/nested_address.cpp",
+      "evidence": "reconstruction/0007f3d0/evidence.md",
+      "revision": "6e29b8c67cac05f6e32a21792579a727aaf50056",
+      "status": "matched",
+      "source_revision": "6e29b8c67cac05f6e32a21792579a727aaf50056",
+      "source_committed_at": "2026-11-19T01:09:37-05:00",
+      "public_source": "proof/6e29b8c67cac05f6e32a21792579a727aaf50056/0007f3d0/source.txt",
+      "public_evidence": "proof/6e29b8c67cac05f6e32a21792579a727aaf50056/0007f3d0/evidence.txt"
+    },
+    {
+      "name": "inferred_reset_fields_and_clear_bit_0",
+      "rva": 340560,
+      "size": 21,
       "status": "queued"
     },
     {
